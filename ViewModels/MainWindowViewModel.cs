@@ -1,14 +1,11 @@
 ﻿using ReactiveUI;
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Reactive;
 
 namespace ASTEM_DB.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        // Initialize fields at declaration to prevent CS8618 warnings
         private ObservableCollection<CardItemViewModel> _cardItems = new ObservableCollection<CardItemViewModel>();
         public ObservableCollection<CardItemViewModel> CardItems
         {
@@ -23,41 +20,78 @@ namespace ASTEM_DB.ViewModels
             set => this.RaiseAndSetIfChanged(ref _sortByNameChecked, value);
         }
 
-        // Properties for the color picker (simplified for layout purposes)
-        private string _hexColor = string.Empty; // Initialize to empty string
+        private string _hexColor = string.Empty; 
         public string HexColor
         {
             get => _hexColor;
-            set => this.RaiseAndSetIfChanged(ref _hexColor, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _hexColor, value);
+                ParseHexToRGB(value);
+            }
+        }
+
+        private void ParseHexToRGB(string hex)
+        {
+            if (!string.IsNullOrWhiteSpace(hex) && hex.StartsWith("#") && hex.Length == 7)
+            {
+                if (int.TryParse(hex.Substring(1, 2), System.Globalization.NumberStyles.HexNumber, null, out int r) &&
+                    int.TryParse(hex.Substring(3, 2), System.Globalization.NumberStyles.HexNumber, null, out int g) &&
+                    int.TryParse(hex.Substring(5, 2), System.Globalization.NumberStyles.HexNumber, null, out int b))
+                {
+                    _red = r;
+                    _green = g;
+                    _blue = b;
+
+                    this.RaisePropertyChanged(nameof(Red));
+                    this.RaisePropertyChanged(nameof(Green));
+                    this.RaisePropertyChanged(nameof(Blue));
+                }
+            }
+        }
+
+        private void UpdateHexColor()
+        {
+            HexColor = $"#{Red:X2}{Green:X2}{Blue:X2}";
         }
 
         private int _red;
         public int Red
         {
             get => _red;
-            set => this.RaiseAndSetIfChanged(ref _red, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _red, value);
+                UpdateHexColor();
+            }
+
         }
 
         private int _green;
         public int Green
         {
             get => _green;
-            set => this.RaiseAndSetIfChanged(ref _green, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _green, value);
+                UpdateHexColor();
+            }
         }
 
         private int _blue;
         public int Blue
         {
             get => _blue;
-            set => this.RaiseAndSetIfChanged(ref _blue, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _blue, value); UpdateHexColor();
+            }
         }
-
-        // public ReactiveCommand<Unit, Unit> SortCommand { get; }
 
         public MainWindowViewModel()
         {
-            // _cardItems is initialized above, so no need to re-initialize here.
-            for (int i = 1; i <= 20; i++)             {
+            for (int i = 1; i <= 20; i++)
+            {
                 CardItems.Add(new CardItemViewModel { Id = $"ID {i}" });
             }
 
@@ -72,6 +106,6 @@ namespace ASTEM_DB.ViewModels
             Debug.WriteLine("SortCommand executed");
             return "Papple";
         }
-        
+
     }
 }

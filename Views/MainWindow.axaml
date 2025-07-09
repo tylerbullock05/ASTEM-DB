@@ -15,7 +15,7 @@
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    <Grid ColumnDefinitions="250,*" RowDefinitions="*">
+    <Grid ColumnDefinitions="325,*" RowDefinitions="*">
         <!--Left Sidebar-->
         <Border
             Grid.Column="0"
@@ -24,7 +24,7 @@
             BorderThickness="0,0,1,0"
             CornerRadius="0">
             <TabControl Margin="10" SelectedIndex="0">
-                <TabItem Header="Color">
+                <TabItem Header="Color" FontWeight="DemiBold" FontSize="20">
                     <StackPanel Margin="10" Spacing="10">
                         <!--Simplified Color Picker UI-->
                         <Grid
@@ -38,19 +38,10 @@
                                 Height="150"
                                 Margin="0,0,0,10"
                                 HorizontalAlignment="Center"
-                                Background="Purple"
-                                CornerRadius="75">
+                                Background="{Binding HexColor}"
+                                CornerRadius="75"/>
                                 <!--Inner circle to represent selected color-->
-                                <Border
-                                    Width="30"
-                                    Height="30"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="{Binding HexColor}"
-                                    BorderBrush="White"
-                                    BorderThickness="2"
-                                    CornerRadius="15" />
-                            </Border>
+                                
 
                             <TextBlock
                                 Grid.Row="1"
@@ -127,10 +118,10 @@
                         </Grid>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="Properties">
+                <TabItem Header="Properties" FontWeight="DemiBold" FontSize="20">
                     <TextBlock Margin="10" Text="Properties content goes here." />
                 </TabItem>
-                <TabItem Header="Misc.">
+                <TabItem Header="Misc." FontWeight="DemiBold" FontSize="20">
                     <TextBlock Margin="10" Text="Miscellaneous content goes here." />
                 </TabItem>
             </TabControl>

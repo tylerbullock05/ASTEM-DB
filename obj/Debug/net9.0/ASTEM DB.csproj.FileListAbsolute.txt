@@ -76,3 +76,4 @@ C:\Users\tyler\ASTEM DB\obj\Debug\net9.0\refint\ASTEM DB.dll
 C:\Users\tyler\ASTEM DB\obj\Debug\net9.0\ASTEM DB.pdb
 C:\Users\tyler\ASTEM DB\obj\Debug\net9.0\ASTEM DB.genruntimeconfig.cache
 C:\Users\tyler\ASTEM DB\obj\Debug\net9.0\ref\ASTEM DB.dll
+C:\Users\tyler\ASTEM DB\obj\Debug\net9.0\ASTEM DB.sourcelink.json

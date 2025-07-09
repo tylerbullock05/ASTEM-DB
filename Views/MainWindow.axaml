@@ -19,8 +19,8 @@
         <!--  Left Sidebar  -->
         <Border
             Grid.Column="0"
-            Background="#F0F0F0"
-            BorderBrush="#E0E0E0"
+            Background="#3b3b3b"
+            BorderBrush="#3b3b3b"
             BorderThickness="0,0,1,0"
             CornerRadius="0">
             <TabControl Margin="10" SelectedIndex="0">

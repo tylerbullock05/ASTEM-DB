@@ -16,7 +16,7 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
     <Grid ColumnDefinitions="325,*" RowDefinitions="*">
-        <!--Left Sidebar-->
+        <!--  Left Sidebar  -->
         <Border
             Grid.Column="0"
             Background="#F0F0F0"
@@ -24,14 +24,17 @@
             BorderThickness="0,0,1,0"
             CornerRadius="0">
             <TabControl Margin="10" SelectedIndex="0">
-                <TabItem Header="Color" FontWeight="DemiBold" FontSize="20">
+                <TabItem
+                    FontSize="20"
+                    FontWeight="DemiBold"
+                    Header="Color">
                     <StackPanel Margin="10" Spacing="10">
-                        <!--Simplified Color Picker UI-->
+                        <!--  Color Picker UI  -->
                         <Grid
                             Margin="0,10,0,0"
                             ColumnDefinitions="Auto,*,Auto"
                             RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-                            <!--Color Circle Placeholder-->
+                            <!--  Color Circle  -->
                             <Border
                                 Grid.ColumnSpan="3"
                                 Width="150"
@@ -39,10 +42,9 @@
                                 Margin="0,0,0,10"
                                 HorizontalAlignment="Center"
                                 Background="{Binding HexColor}"
-                                CornerRadius="75"/>
-                                <!--Inner circle to represent selected color-->
-                                
-
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                CornerRadius="75" />
                             <TextBlock
                                 Grid.Row="1"
                                 Grid.Column="0"
@@ -118,70 +120,92 @@
                         </Grid>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="Properties" FontWeight="DemiBold" FontSize="20">
-                    <TextBlock Margin="10" Text="Properties content goes here." />
+                <TabItem
+                    FontSize="20"
+                    FontWeight="DemiBold"
+                    Header="Properties">
+                    <StackPanel Margin="10" Spacing="5">
+                        <TextBlock Margin="0,0,0,0" Text="Glaze Type" />
+                        <ComboBox Width="150">
+                            <ComboBoxItem Content="Matte" />
+                            <ComboBoxItem Content="Glossy" />
+                        </ComboBox>
+                        <TextBlock Margin="0,0,0,0" Text="Surface Condition" />
+                        <ComboBox Width="150">
+                            <ComboBoxItem Content="Rough" />
+                            <ComboBoxItem Content="Smooth" />
+                        </ComboBox>
+                        <TextBlock Margin="0,0,0,0" Text="Firing Atmosphere" />
+                        <ComboBox Width="150">
+                            <ComboBoxItem Content="OF" />
+                            <ComboBoxItem Content="RF" />
+                        </ComboBox>
+                    </StackPanel>
                 </TabItem>
-                <TabItem Header="Misc." FontWeight="DemiBold" FontSize="20">
+                <TabItem
+                    FontSize="20"
+                    FontWeight="DemiBold"
+                    Header="Misc.">
                     <TextBlock Margin="10" Text="Miscellaneous content goes here." />
                 </TabItem>
             </TabControl>
         </Border>
 
-        <!--Main Content Area-->
+        <!--  Main Content Area  -->
         <Grid
             Grid.Column="1"
             Margin="20"
             RowDefinitions="*,Auto">
-            <!--Image Grid-->
-                  <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0 40 0 0">
+            <!--  Image Grid  -->
+            <ScrollViewer Margin="0,40,0,0" VerticalScrollBarVisibility="Auto">
 
-            <ItemsControl Grid.Row="0" ItemsSource="{Binding CardItems}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <!--Removed Spacing attribute from WrapPanel-->
-                        <WrapPanel
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="vm:CardItemViewModel">
-                        <!--Added Margin to the Border for spacing between items-->
-                        <Border
-                            Width="150"
-                            Height="150"
-                            Margin="0,0,15,15"
-                            Background="#F8F8F8"
-                            BorderBrush="#E0E0E0"
-                            BorderThickness="1"
-                            CornerRadius="8">
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <!--Placeholder for image-->
-                                <Border
-                                    Width="80"
-                                    Height="80"
-                                    Margin="0,0,0,10"
-                                    Background="#E0E0E0"
-                                    CornerRadius="5">
-                                    <Path
-                                        Margin="20"
-                                        Data="M 10 10 L 140 140 M 140 10 L 10 140"
-                                        Stretch="Uniform"
-                                        Stroke="#A0A0A0"
-                                        StrokeThickness="2" />
-                                </Border>
-                                <TextBlock
-                                    FontWeight="SemiBold"
-                                    Foreground="#333333"
-                                    Text="{Binding Id}" />
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                <ItemsControl Grid.Row="0" ItemsSource="{Binding CardItems}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <!--  Removed Spacing attribute from WrapPanel  -->
+                            <WrapPanel
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:CardItemViewModel">
+                            <!--  Added Margin to the Border for spacing between items  -->
+                            <Border
+                                Width="150"
+                                Height="150"
+                                Margin="0,0,15,15"
+                                Background="#F8F8F8"
+                                BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <!--  Placeholder for image  -->
+                                    <Border
+                                        Width="80"
+                                        Height="80"
+                                        Margin="0,0,0,10"
+                                        Background="#E0E0E0"
+                                        CornerRadius="5">
+                                        <Path
+                                            Margin="20"
+                                            Data="M 10 10 L 140 140 M 140 10 L 10 140"
+                                            Stretch="Uniform"
+                                            Stroke="#A0A0A0"
+                                            StrokeThickness="2" />
+                                    </Border>
+                                    <TextBlock
+                                        FontWeight="SemiBold"
+                                        Foreground="#333333"
+                                        Text="{Binding Id}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </ScrollViewer>
-            <!--Sort-->
+            <!--  Sort  -->
             <StackPanel
                 Grid.Row="1"
                 Margin="0,20,0,0"

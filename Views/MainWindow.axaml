@@ -73,7 +73,7 @@
                                 Maximum="255"
                                 Minimum="0"
                                 IsEnabled="{Binding FilterByColor}"
-                                Value="{Binding Red}" />
+                                Value="{Binding Red}"/>
                             <TextBox
                                 Grid.Row="2"
                                 Grid.Column="2"
@@ -139,20 +139,6 @@
                             Margin="0,10,0,0"
                             IsChecked="{Binding FilterByColor, Mode=TwoWay}"
                             Content="Filter By Color" />
-
-                        <TextBlock VerticalAlignment="Center" Text="LAB Color" />
-                        <TextBlock
-                            Margin="5,0,0,0"
-                            HorizontalAlignment="Stretch"
-                            Text="{Binding Lightness}" />
-                        <TextBlock
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            Text="{Binding RedGreen}" />
-                        <TextBlock
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            Text="{Binding BlueYellow}" />
                     </StackPanel>
                 </TabItem>
                 <TabItem

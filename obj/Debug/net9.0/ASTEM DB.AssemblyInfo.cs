@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ASTEM DB")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a8b001dc3a758a67c0e8e74d0119a0a274b26ac2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f3183373c3a23ac001268ac0fb384067356b3d7b")]
 [assembly: System.Reflection.AssemblyProductAttribute("ASTEM DB")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ASTEM DB")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

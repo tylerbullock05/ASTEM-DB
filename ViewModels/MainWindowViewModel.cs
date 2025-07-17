@@ -90,6 +90,8 @@ namespace ASTEM_DB.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _hexColor, value);
                 ParseHexToRGB(value);
+                labConversion();
+                FilterCardItems();
             }
         }
 

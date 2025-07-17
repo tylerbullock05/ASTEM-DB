@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "JvaCiyAl3C4=",
+  "dgSpecHash": "+txxDvsVp38=",
   "success": true,
   "projectFilePath": "C:\\Users\\tyler\\ASTEM DB\\ASTEM DB.csproj",
   "expectedPackageFiles": [
@@ -19,6 +19,7 @@
     "C:\\Users\\tyler\\.nuget\\packages\\avalonia.themes.simple\\11.3.2\\avalonia.themes.simple.11.3.2.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\avalonia.win32\\11.3.2\\avalonia.win32.11.3.2.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\avalonia.x11\\11.3.2\\avalonia.x11.11.3.2.nupkg.sha512",
+    "C:\\Users\\tyler\\.nuget\\packages\\colormineportable\\2.0.4\\colormineportable.2.0.4.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.1\\communitytoolkit.mvvm.8.2.1.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\dynamicdata\\9.4.1\\dynamicdata.9.4.1.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\harfbuzzsharp\\8.3.1.1\\harfbuzzsharp.8.3.1.1.nupkg.sha512",
@@ -27,6 +28,9 @@
     "C:\\Users\\tyler\\.nuget\\packages\\harfbuzzsharp.nativeassets.webassembly\\8.3.1.1\\harfbuzzsharp.nativeassets.webassembly.8.3.1.1.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\harfbuzzsharp.nativeassets.win32\\8.3.1.1\\harfbuzzsharp.nativeassets.win32.8.3.1.1.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\microcom.runtime\\0.11.0\\microcom.runtime.0.11.0.nupkg.sha512",
+    "C:\\Users\\tyler\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\tyler\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\tyler\\.nuget\\packages\\mysqlconnector\\2.4.0\\mysqlconnector.2.4.0.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\reactiveui\\20.4.1\\reactiveui.20.4.1.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\skiasharp\\2.88.9\\skiasharp.2.88.9.nupkg.sha512",
     "C:\\Users\\tyler\\.nuget\\packages\\skiasharp.nativeassets.linux\\2.88.9\\skiasharp.nativeassets.linux.2.88.9.nupkg.sha512",

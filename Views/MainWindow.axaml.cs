@@ -1,5 +1,7 @@
+// using System;
 using ASTEM_DB.ViewModels;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 
 namespace ASTEM_DB.Views
@@ -11,6 +13,24 @@ namespace ASTEM_DB.Views
             InitializeComponent();
             DataContext = new MainWindowViewModel();
 
+        }
+        private void OnCardClicked(object? sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is CardItemViewModel clickedCard)
+            {
+                if (this.DataContext is MainWindowViewModel vm)
+                {
+                    if (vm.SelectedCard == clickedCard)
+                    {
+                        vm.IsSidebarVisible = !vm.IsSidebarVisible;
+                    }
+                    else
+                    {
+                        vm.SelectedCard = clickedCard;
+                        vm.IsSidebarVisible = true;
+                    }
+                }
+            }
         }
 
         private void InitializeComponent()

@@ -68,9 +68,17 @@
               "target": "Package",
               "version": "[11.3.2, )"
             },
+            "ColorMinePortable": {
+              "target": "Package",
+              "version": "[2.0.4, )"
+            },
             "CommunityToolkit.Mvvm": {
               "target": "Package",
               "version": "[8.2.1, )"
+            },
+            "MySqlConnector": {
+              "target": "Package",
+              "version": "[2.4.0, )"
             },
             "ReactiveUI": {
               "target": "Package",

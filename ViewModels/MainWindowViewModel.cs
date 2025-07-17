@@ -173,15 +173,7 @@ namespace ASTEM_DB.ViewModels
             Blue = 117;
             labConversion();
         }
-
-        // private async void FilterCardItems()
-        // {
-        //     var items = await _db.GetFilteredCardItemsAsync(SelectedGlazeType, SelectedSurfaceCondition);
-
-        //     CardItems.Clear();
-        //     foreach (var item in items)
-        //         CardItems.Add(item);
-        // }
+        
         private async void FilterCardItems()
         {
             var allItems = await _db.GetFilteredCardItemsAsync(SelectedGlazeType, SelectedSurfaceCondition);

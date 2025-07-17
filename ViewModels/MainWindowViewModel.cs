@@ -173,7 +173,7 @@ namespace ASTEM_DB.ViewModels
             Blue = 117;
             labConversion();
         }
-        
+
         private async void FilterCardItems()
         {
             var allItems = await _db.GetFilteredCardItemsAsync(SelectedGlazeType, SelectedSurfaceCondition);
@@ -181,9 +181,11 @@ namespace ASTEM_DB.ViewModels
             var selectedLab = new Lab { L = Lightness, A = RedGreen, B = BlueYellow };
             double threshold = 10.0;
 
-
             var filtered = allItems.Where(item =>
             {
+                if (!FilterByColor)
+                    return true;
+
                 var lab = new Lab { L = item.ColorL, A = item.ColorA, B = item.ColorB };
                 double deltaE = selectedLab.Compare(lab, new Cie1976Comparison());
                 return deltaE <= threshold;
@@ -280,6 +282,17 @@ namespace ASTEM_DB.ViewModels
             Lightness = lab.L;
             RedGreen = lab.A;
             BlueYellow = lab.B;
+        }
+
+        private bool _filterByColor = true;
+        public bool FilterByColor
+        {
+            get => _filterByColor;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _filterByColor, value);
+                FilterCardItems();
+            }
         }
 
     }

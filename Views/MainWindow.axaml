@@ -56,6 +56,7 @@
                                 Grid.Column="1"
                                 Margin="5,0,0,0"
                                 HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding FilterByColor}"
                                 Text="{Binding HexColor}"
                                 Watermark="e.g. #9B59B6" />
                             <!--  Red  -->
@@ -71,6 +72,7 @@
                                 HorizontalAlignment="Stretch"
                                 Maximum="255"
                                 Minimum="0"
+                                IsEnabled="{Binding FilterByColor}"
                                 Value="{Binding Red}" />
                             <TextBox
                                 Grid.Row="2"
@@ -78,7 +80,7 @@
                                 Width="40"
                                 Margin="5,0,0,0"
                                 VerticalAlignment="Center"
-                                Text="{Binding Red, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding Red, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding FilterByColor}"/>
 
                             <!--  Green  -->
                             <TextBlock
@@ -93,14 +95,15 @@
                                 HorizontalAlignment="Stretch"
                                 Maximum="255"
                                 Minimum="0"
-                                Value="{Binding Green}" />
+                                Value="{Binding Green}"
+                                IsEnabled="{Binding FilterByColor}" />
                             <TextBox
                                 Grid.Row="3"
                                 Grid.Column="2"
                                 Width="40"
                                 Margin="5,0,0,0"
                                 VerticalAlignment="Center"
-                                Text="{Binding Green, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding Green, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding FilterByColor}" />
 
                             <!--  Blue  -->
                             <TextBlock
@@ -115,6 +118,7 @@
                                 HorizontalAlignment="Stretch"
                                 Maximum="255"
                                 Minimum="0"
+                                IsEnabled="{Binding FilterByColor}"
                                 Value="{Binding Blue}" />
                             <TextBox
                                 Grid.Row="4"
@@ -122,13 +126,20 @@
                                 Width="40"
                                 Margin="5,0,0,0"
                                 VerticalAlignment="Center"
+                                IsEnabled="{Binding FilterByColor}"
                                 Text="{Binding Blue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
-                        <ComboBox
+                        <!-- <ComboBox
                             Width="150"
                             Margin="0,10,0,0"
                             ItemsSource="{Binding ColorPalettes}"
-                            SelectedItem="{Binding SelectedColorPalette, Mode=TwoWay}" />
+                            SelectedItem="{Binding SelectedColorPalette, Mode=TwoWay}" /> -->
+
+                        <CheckBox
+                            Margin="0,10,0,0"
+                            IsChecked="{Binding FilterByColor, Mode=TwoWay}"
+                            Content="Filter By Color" />
+
                         <TextBlock VerticalAlignment="Center" Text="LAB Color" />
                         <TextBlock
                             Margin="5,0,0,0"

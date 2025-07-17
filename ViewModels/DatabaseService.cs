@@ -88,7 +88,7 @@ namespace ASTEM_DB.Services
         }
 
 
-        public async Task<List<CardItemViewModel>> GetFilteredCardItemsAsync(string? glazeType, string? surfaceCondition)
+        public async Task<List<CardItemViewModel>> GetFilteredCardItemsAsync(string? glazeType, string? surfaceCondition, string? firingType)
         {
             var items = new List<CardItemViewModel>();
 
@@ -101,6 +101,8 @@ namespace ASTEM_DB.Services
 
             if (!string.IsNullOrWhiteSpace(surfaceCondition) && surfaceCondition != "All")
                 filters.Add("sc.Name = @SurfaceCondition");
+            if (!string.IsNullOrWhiteSpace(firingType) && firingType != "All")
+                filters.Add("tp.FiringType = @FiringType");
 
             string whereClause = filters.Count > 0 ? "WHERE " + string.Join(" AND ", filters) : "";
 
@@ -125,6 +127,7 @@ namespace ASTEM_DB.Services
             await using var cmd = new MySqlCommand(query, conn);
             if (query.Contains("@GlazeType")) cmd.Parameters.AddWithValue("@GlazeType", glazeType);
             if (query.Contains("@SurfaceCondition")) cmd.Parameters.AddWithValue("@SurfaceCondition", surfaceCondition);
+            if (query.Contains("@FiringType")) cmd.Parameters.AddWithValue("@FiringType", firingType);
 
             await using var reader = await cmd.ExecuteReaderAsync();
 

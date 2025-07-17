@@ -176,7 +176,7 @@ namespace ASTEM_DB.ViewModels
 
         private async void FilterCardItems()
         {
-            var allItems = await _db.GetFilteredCardItemsAsync(SelectedGlazeType, SelectedSurfaceCondition);
+            var allItems = await _db.GetFilteredCardItemsAsync(SelectedGlazeType, SelectedSurfaceCondition, SelectedFiringType);
 
             var selectedLab = new Lab { L = Lightness, A = RedGreen, B = BlueYellow };
             double threshold = 10.0;

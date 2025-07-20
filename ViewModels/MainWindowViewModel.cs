@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using ColorMine.ColorSpaces;
 using ColorMine.ColorSpaces.Comparisons;
+using Avalonia.Media;
 // using System.Diagnostics;
 
 namespace ASTEM_DB.ViewModels
@@ -29,7 +30,6 @@ namespace ASTEM_DB.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedGlazeType, value);
-                FilterCardItems();
             }
         }
 
@@ -40,7 +40,6 @@ namespace ASTEM_DB.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedSurfaceCondition, value);
-                FilterCardItems();
             }
         }
 
@@ -53,7 +52,6 @@ namespace ASTEM_DB.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedFiringType, value);
-                FilterCardItems();
             }
         }
 
@@ -82,28 +80,18 @@ namespace ASTEM_DB.ViewModels
             set => this.RaiseAndSetIfChanged(ref _isSidebarVisible, value);
         }
 
-        private string _hexColor = string.Empty;
-        public string HexColor
-        {
-            get => _hexColor;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _hexColor, value);
-                ParseHexToRGB(value);
-                labConversion();
-                FilterCardItems();
-            }
-        }
-
         private int _red;
         public int Red
         {
             get => _red;
             set
             {
-                int clamped = Math.Clamp(value, 0, 255);
-                this.RaiseAndSetIfChanged(ref _red, clamped);
-                UpdateHexColor();
+                var clamped = Math.Clamp(value, 0, 255);
+                if (_red == clamped) return;
+
+                _red = clamped;
+                this.RaisePropertyChanged(nameof(Red));
+                UpdateSelectedColor(); // This is OK, because we guard recursion there
                 labConversion();
             }
         }
@@ -114,22 +102,27 @@ namespace ASTEM_DB.ViewModels
             get => _green;
             set
             {
-                int clamped = Math.Clamp(value, 0, 255);
-                this.RaiseAndSetIfChanged(ref _green, clamped);
-                UpdateHexColor();
+                var clamped = Math.Clamp(value, 0, 255);
+                if (_green == clamped) return;
+
+                _green = clamped;
+                this.RaisePropertyChanged(nameof(Green));
+                UpdateSelectedColor();
                 labConversion();
             }
         }
-
         private int _blue;
         public int Blue
         {
             get => _blue;
             set
             {
-                int clamped = Math.Clamp(value, 0, 255);
-                this.RaiseAndSetIfChanged(ref _blue, clamped);
-                UpdateHexColor();
+                var clamped = Math.Clamp(value, 0, 255);
+                if (_blue == clamped) return;
+
+                _blue = clamped;
+                this.RaisePropertyChanged(nameof(Blue));
+                UpdateSelectedColor();
                 labConversion();
             }
         }
@@ -141,7 +134,6 @@ namespace ASTEM_DB.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _lightness, value);
-                FilterCardItems();
             }
         }
         private double _redGreen;
@@ -151,7 +143,6 @@ namespace ASTEM_DB.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _redGreen, value);
-                FilterCardItems();
             }
         }
         private double _blueYellow;
@@ -161,15 +152,12 @@ namespace ASTEM_DB.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _blueYellow, value);
-                FilterCardItems();
             }
         }
 
         public MainWindowViewModel()
         {
             LoadData();
-
-            HexColor = "#9B59B6";
             Red = 185;
             Green = 145;
             Blue = 117;
@@ -217,11 +205,6 @@ namespace ASTEM_DB.ViewModels
             }
         }
 
-        private void UpdateHexColor()
-        {
-            HexColor = $"#{Red:X2}{Green:X2}{Blue:X2}";
-        }
-
         public ObservableCollection<string> ColorPalettes { get; } = new();
         private string? _selectedColorPalette;
         public string? SelectedColorPalette
@@ -230,7 +213,6 @@ namespace ASTEM_DB.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedColorPalette, value);
-                FilterCardItems();
             }
         }
 
@@ -293,8 +275,40 @@ namespace ASTEM_DB.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _filterByColor, value);
-                FilterCardItems();
             }
+        }
+
+        public void SearchCommand()
+        {
+            FilterCardItems();
+        }
+
+        private Color _selectedColor;
+        public Color SelectedColor
+        {
+            get => _selectedColor;
+            set
+            {
+                if (value == _selectedColor) return;
+                _selectedColor = value;
+                this.RaisePropertyChanged(nameof(SelectedColor));
+
+                _red = value.R;
+                _green = value.G;
+                _blue = value.B;
+                this.RaisePropertyChanged(nameof(Red));
+                this.RaisePropertyChanged(nameof(Green));
+                this.RaisePropertyChanged(nameof(Blue));
+                labConversion();
+            }
+        }
+        private void UpdateSelectedColor()
+        {
+            var newColor = Color.FromRgb((byte)Red, (byte)Green, (byte)Blue);
+            if (_selectedColor == newColor) return;
+
+            _selectedColor = newColor;
+            this.RaisePropertyChanged(nameof(SelectedColor));
         }
 
     }

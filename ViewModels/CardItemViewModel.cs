@@ -7,14 +7,18 @@ namespace ASTEM_DB.ViewModels
         private string _id = string.Empty;
         private Avalonia.Media.Imaging.Bitmap _image = null!;
         private string _glazeType = string.Empty;
+        private string _glazeTypeString = string.Empty;
         private double _colorL;
         private double _colorA;
         private double _colorB;
         private string _lab = string.Empty;
         private string _firingType = string.Empty;
+        private string _firingTypeString = string.Empty;
         private string _soilType = string.Empty;
+        private string _soilTypeString = string.Empty;
         private string _chemicalComposition = string.Empty;
         private string _surfaceCondition = string.Empty;
+        private string _surfaceConditionString = string.Empty;
         public string Id
         {
             get => _id;
@@ -30,7 +34,17 @@ namespace ASTEM_DB.ViewModels
         public string GlazeType
         {
             get => _glazeType;
-            set => this.RaiseAndSetIfChanged(ref _glazeType, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _glazeType, value);
+                GlazeTypeString = $"Glaze Type: {value}";
+            }
+        }
+
+        public string GlazeTypeString
+        {
+            get => _glazeTypeString;
+            private set => this.RaiseAndSetIfChanged(ref _glazeTypeString, value);
         }
 
         public double ColorL
@@ -60,13 +74,30 @@ namespace ASTEM_DB.ViewModels
         public string FiringType
         {
             get => _firingType;
-            set => this.RaiseAndSetIfChanged(ref _firingType, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _firingType, value);
+                FiringTypeString = $"Firing Method: {value}";
+            }
         }
-
+        public string FiringTypeString
+        {
+            get => _firingTypeString;
+            private set => this.RaiseAndSetIfChanged(ref _firingTypeString, value);
+        }
         public string SoilType
         {
             get => _soilType;
-            set => this.RaiseAndSetIfChanged(ref _soilType, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _soilType, value);
+                SoilTypeString = $"Soil Type: {value}";
+            }
+        }
+        public string SoilTypeString
+        {
+            get => _soilTypeString;
+            private set => this.RaiseAndSetIfChanged(ref _soilTypeString, value);
         }
 
         public string ChemicalComposition
@@ -77,8 +108,17 @@ namespace ASTEM_DB.ViewModels
 
         public string SurfaceCondition
         {
-            get => _surfaceCondition;
-            set => this.RaiseAndSetIfChanged(ref _surfaceCondition, value);
+            get => _firingType;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _surfaceCondition, value);
+                SurfaceConditionString = $"Surface Condition: {value}";
+            }
+        }
+        public string SurfaceConditionString
+        {
+            get => _surfaceConditionString;
+            private set => this.RaiseAndSetIfChanged(ref _surfaceConditionString, value);
         }
     }
 

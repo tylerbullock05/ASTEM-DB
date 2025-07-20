@@ -6,7 +6,9 @@ using System.Linq;
 using ColorMine.ColorSpaces;
 using ColorMine.ColorSpaces.Comparisons;
 using Avalonia.Media;
-// using System.Diagnostics;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Microsoft.VisualBasic.FileIO;
 
 namespace ASTEM_DB.ViewModels
 {
@@ -91,7 +93,7 @@ namespace ASTEM_DB.ViewModels
 
                 _red = clamped;
                 this.RaisePropertyChanged(nameof(Red));
-                UpdateSelectedColor(); // This is OK, because we guard recursion there
+                UpdateSelectedColor();
                 labConversion();
             }
         }
@@ -164,13 +166,17 @@ namespace ASTEM_DB.ViewModels
             labConversion();
         }
 
+        public void SearchCommand()
+        {
+            FilterCardItems();
+        }
+
         private async void FilterCardItems()
         {
             var allItems = await _db.GetFilteredCardItemsAsync(SelectedGlazeType, SelectedSurfaceCondition, SelectedFiringType);
 
             var selectedLab = new Lab { L = Lightness, A = RedGreen, B = BlueYellow };
             double threshold = 10.0;
-
             var filtered = allItems.Where(item =>
             {
                 if (!FilterByColor)
@@ -183,25 +189,11 @@ namespace ASTEM_DB.ViewModels
 
             CardItems.Clear();
             foreach (var item in filtered)
-                CardItems.Add(item);
-        }
-
-        private void ParseHexToRGB(string hex)
-        {
-            if (!string.IsNullOrWhiteSpace(hex) && hex.StartsWith("#") && hex.Length == 7)
             {
-                if (int.TryParse(hex.Substring(1, 2), System.Globalization.NumberStyles.HexNumber, null, out int r) &&
-                    int.TryParse(hex.Substring(3, 2), System.Globalization.NumberStyles.HexNumber, null, out int g) &&
-                    int.TryParse(hex.Substring(5, 2), System.Globalization.NumberStyles.HexNumber, null, out int b))
-                {
-                    _red = r;
-                    _green = g;
-                    _blue = b;
-
-                    this.RaisePropertyChanged(nameof(Red));
-                    this.RaisePropertyChanged(nameof(Green));
-                    this.RaisePropertyChanged(nameof(Blue));
-                }
+                CardItems.Add(item);
+                var lab = new Lab { L = item.ColorL, A = item.ColorA, B = item.ColorB };
+                var rgb = lab.To<Rgb>();
+                item.ColorName = GetColorName(Color.FromRgb((byte)rgb.R, (byte)rgb.G, (byte)rgb.B));
             }
         }
 
@@ -278,11 +270,6 @@ namespace ASTEM_DB.ViewModels
             }
         }
 
-        public void SearchCommand()
-        {
-            FilterCardItems();
-        }
-
         private Color _selectedColor;
         public Color SelectedColor
         {
@@ -311,5 +298,40 @@ namespace ASTEM_DB.ViewModels
             this.RaisePropertyChanged(nameof(SelectedColor));
         }
 
+        private static readonly Dictionary<string, Color> BasicColors = new()
+        {
+            { "Black", Color.FromRgb(0, 0, 0) },
+            { "White", Color.FromRgb(255, 255, 255) },
+            { "Red", Color.FromRgb(255, 0, 0) },
+            { "Green", Color.FromRgb(0, 255, 0) },
+            { "Blue", Color.FromRgb(0, 0, 255) },
+            { "Yellow", Color.FromRgb(255, 255, 0) },
+            { "Cyan", Color.FromRgb(0, 255, 255) },
+            { "Magenta", Color.FromRgb(255, 0, 255) },
+            { "Gray", Color.FromRgb(137, 137, 137) },
+            { "Orange", Color.FromRgb(255, 165, 0) },
+            { "Brown", Color.FromRgb(137, 81, 41) },
+            { "Pink", Color.FromRgb(255, 192, 203) }
+        };
+
+        public static string GetColorName(Color inputColor)
+        {
+            string colorName = "Unknown";
+            double minDistance = double.MaxValue;
+
+            foreach (var (name, color) in BasicColors)
+            {
+                double distance = Math.Pow(inputColor.R - color.R, 2) +
+                                  Math.Pow(inputColor.G - color.G, 2) +
+                                  Math.Pow(inputColor.B - color.B, 2);
+
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    colorName = name;
+                }
+            }
+            return colorName;
+        }
     }
 }

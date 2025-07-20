@@ -139,6 +139,7 @@
                     <TextBlock Text="{Binding SelectedCard.SurfaceConditionString}" />
                     <TextBlock Text="{Binding SelectedCard.ChemicalComposition}" />
                     <TextBlock Text="{Binding SelectedCard.Lab}" />
+                    <TextBlock Text="{Binding SelectedCard.ColorName}" />
                 </StackPanel>
             </DockPanel>
         </Border>

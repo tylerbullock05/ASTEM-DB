@@ -19,6 +19,7 @@ namespace ASTEM_DB.ViewModels
         private string _chemicalComposition = string.Empty;
         private string _surfaceCondition = string.Empty;
         private string _surfaceConditionString = string.Empty;
+        private string _colorName = string.Empty;
         public string Id
         {
             get => _id;
@@ -120,6 +121,10 @@ namespace ASTEM_DB.ViewModels
             get => _surfaceConditionString;
             private set => this.RaiseAndSetIfChanged(ref _surfaceConditionString, value);
         }
+        public string ColorName
+        {
+            get => _colorName;
+            set => this.RaiseAndSetIfChanged(ref _colorName, value);
+        }
     }
-
 }

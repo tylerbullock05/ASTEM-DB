@@ -96,24 +96,24 @@ CREATE TABLE IF NOT EXISTS `testpiece` (
   `ChemicalComposition` mediumtext DEFAULT NULL,
   `SurfaceConditionID` int(10) unsigned DEFAULT NULL,
   `EntryDate` date DEFAULT NULL,
-  `FiringType` enum('OF','RF','RF^RF','jakuRF') DEFAULT NULL,
-  `SoilType` enum('tuti','siratuti','akatuti','uwaisi','dosenbo','ziki','kizi') DEFAULT NULL,
+  `FiringType` mediumtext DEFAULT NULL,
+  `SoilType` mediumtext DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `idx_testpiece_colorL` (`Color_L`),
   KEY `idx_testpiece_colorA` (`Color_A`),
   KEY `idx_testpiece_colorB` (`Color_B`),
   KEY `idx_testpiece_firingtemp` (`FiringTemperature`),
-  KEY `idx_testpiece_firingtype` (`FiringType`),
+  KEY `idx_testpiece_firingtype` (`FiringType`(768)),
   KEY `idx_testpiece_entrydate` (`EntryDate`),
   KEY `idx_testpiece_glazetype` (`GlazeTypeID`),
   KEY `idx_testpiece_surfacecondition` (`SurfaceConditionID`),
   KEY `idx_testpiece_board` (`BoardID`),
-  KEY `idx_soil_type` (`SoilType`),
+  KEY `idx_soil_type` (`SoilType`(768)),
   FULLTEXT KEY `ft_chemical` (`ChemicalComposition`),
   CONSTRAINT `testpiece_ibfk_1` FOREIGN KEY (`BoardID`) REFERENCES `tileboard` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `testpiece_ibfk_2` FOREIGN KEY (`GlazeTypeID`) REFERENCES `glazetype` (`ID`),
   CONSTRAINT `testpiece_ibfk_3` FOREIGN KEY (`SurfaceConditionID`) REFERENCES `surfacecondition` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='テストピース\r\n\r\n+ more glaze IDs (ato de)';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='テストピース\r\n\r\nto-do:\r\nFiringType & SoilType -> Tables\r\n+ more glaze IDs (ato de)\r\n- ChemicalComposition\r\nStore type -> binary data for images ((6-bit)UU encode)';
 
 -- Dumping data for table tilearchive.testpiece: ~0 rows (approximately)
 
@@ -126,9 +126,11 @@ CREATE TABLE IF NOT EXISTS `tileboard` (
   `CreatedBy` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   FULLTEXT KEY `ft_description` (`Description`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='テストボード';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='テストボード';
 
 -- Dumping data for table tilearchive.tileboard: ~0 rows (approximately)
+INSERT INTO `tileboard` (`ID`, `Image`, `TileCount`, `Description`, `CreatedBy`) VALUES
+	(1, NULL, NULL, NULL, NULL);
 
 -- Dumping structure for table tilearchive.tile_color
 CREATE TABLE IF NOT EXISTS `tile_color` (
@@ -152,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `tile_compound` (
   KEY `CompoundID` (`CompoundID`) USING BTREE,
   CONSTRAINT `tile_compound_ibfk_1` FOREIGN KEY (`TileID`) REFERENCES `testpiece` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `tile_compound_ibfk_2` FOREIGN KEY (`CompoundID`) REFERENCES `compound` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin COMMENT='テストピース <-> 化合';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='テストピース <-> 化合';
 
 -- Dumping data for table tilearchive.tile_compound: ~0 rows (approximately)
 
@@ -164,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `tile_technique` (
   KEY `TechniqueID` (`TechniqueID`),
   CONSTRAINT `tile_technique_ibfk_1` FOREIGN KEY (`TestPieceID`) REFERENCES `testpiece` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `tile_technique_ibfk_2` FOREIGN KEY (`TechniqueID`) REFERENCES `technique` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin COMMENT='テストピース <-> 技法';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='テストピース <-> 技法';
 
 -- Dumping data for table tilearchive.tile_technique: ~0 rows (approximately)
 
@@ -181,9 +183,9 @@ CREATE TABLE `view_testpiece_full` (
 	`BoardID` INT(10) UNSIGNED NULL,
 	`CreatedBy` VARCHAR(100) NULL COLLATE 'utf8mb4_unicode_ci',
 	`EntryDate` DATE NULL,
-	`FiringType` ENUM('OF','RF','RF^RF','jakuRF') NULL COLLATE 'utf8mb4_unicode_ci',
+	`FiringType` MEDIUMTEXT NULL COLLATE 'utf8mb4_unicode_ci',
 	`FiringTemperature` INT(11) NULL,
-	`SoilType` ENUM('tuti','siratuti','akatuti','uwaisi','dosenbo','ziki','kizi') NULL COLLATE 'utf8mb4_unicode_ci'
+	`SoilType` MEDIUMTEXT NULL COLLATE 'utf8mb4_unicode_ci'
 ) ENGINE=MyISAM;
 
 -- Removing temporary table and create final VIEW structure

@@ -7,8 +7,8 @@ using ColorMine.ColorSpaces;
 using ColorMine.ColorSpaces.Comparisons;
 using Avalonia.Media;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.VisualBasic.FileIO;
+// using System.Diagnostics;
+// using Microsoft.VisualBasic.FileIO;
 
 namespace ASTEM_DB.ViewModels
 {
@@ -171,29 +171,57 @@ namespace ASTEM_DB.ViewModels
             FilterCardItems();
         }
 
+        private bool _isFilterEmpty;
+        public bool IsFilterEmpty
+        {
+            get => _isFilterEmpty;
+            set => this.RaiseAndSetIfChanged(ref _isFilterEmpty, value);
+        }
+        private bool _filterByString;
+        public bool FilterByString
+        {
+            get => _filterByString;
+            set => this.RaiseAndSetIfChanged(ref _filterByString, value);
+        }
         private async void FilterCardItems()
         {
             var allItems = await _db.GetFilteredCardItemsAsync(SelectedGlazeType, SelectedSurfaceCondition, SelectedFiringType);
 
             var selectedLab = new Lab { L = Lightness, A = RedGreen, B = BlueYellow };
             double threshold = 10.0;
-            var filtered = allItems.Where(item =>
-            {
-                if (!FilterByColor)
-                    return true;
 
-                var lab = new Lab { L = item.ColorL, A = item.ColorA, B = item.ColorB };
-                double deltaE = selectedLab.Compare(lab, new Cie1976Comparison());
-                return deltaE <= threshold;
-            });
-
-            CardItems.Clear();
-            foreach (var item in filtered)
+            // Add ColorName if it isn't already present
+            foreach (var item in allItems)
             {
-                CardItems.Add(item);
                 var lab = new Lab { L = item.ColorL, A = item.ColorA, B = item.ColorB };
                 var rgb = lab.To<Rgb>();
                 item.ColorName = GetColorName(Color.FromRgb((byte)rgb.R, (byte)rgb.G, (byte)rgb.B));
+            }
+
+            var filtered = allItems.Where(item =>
+            {
+                if (FilterByString)
+                {
+                    return item.ColorName == SelectedColorPalette;
+                }
+                else if (!FilterByColor)
+                {
+                    return true;
+                }
+                else
+                {
+                    var lab = new Lab { L = item.ColorL, A = item.ColorA, B = item.ColorB };
+                    double deltaE = selectedLab.Compare(lab, new Cie1976Comparison());
+                    return deltaE <= threshold;
+                }
+            });
+
+            CardItems.Clear();
+            IsFilterEmpty = !filtered.Any();
+
+            foreach (var item in filtered)
+            {
+                CardItems.Add(item);
             }
         }
 
@@ -237,12 +265,18 @@ namespace ASTEM_DB.ViewModels
 
             // Set ColorPalettes
             ColorPalettes.Clear();
+            ColorPalettes.Add("Black");
+            ColorPalettes.Add("White");
             ColorPalettes.Add("Red");
-            ColorPalettes.Add("Orange");
-            ColorPalettes.Add("Yellow");
             ColorPalettes.Add("Green");
+            ColorPalettes.Add("Yellow");
             ColorPalettes.Add("Blue");
-            ColorPalettes.Add("Purple");
+            ColorPalettes.Add("Cyan");
+            ColorPalettes.Add("Magenta");
+            ColorPalettes.Add("Pink");
+            ColorPalettes.Add("Gray");
+            ColorPalettes.Add("Orange");
+            ColorPalettes.Add("Brown");
 
             // Set default filters
             SelectedGlazeType = "All";

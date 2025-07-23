@@ -50,6 +50,11 @@
                                 Margin="0,10,0,0"
                                 Content="Filter By Color"
                                 IsChecked="{Binding FilterByColor, Mode=TwoWay}" />
+                            <CheckBox
+                                Margin="0,10,0,0"
+                                Content="Filter By Color Name"
+                                IsChecked="{Binding FilterByString, Mode=TwoWay}" />
+
                             <TextBlock Margin="0,0,0,0" Text="Glaze Type" />
                             <ComboBox ItemsSource="{Binding GlazeTypes}" SelectedItem="{Binding SelectedGlazeType, Mode=TwoWay}" />
 
@@ -60,6 +65,8 @@
                                 Width="150"
                                 ItemsSource="{Binding FiringTypes}"
                                 SelectedItem="{Binding SelectedFiringType, Mode=TwoWay}" />
+                            <TextBlock Margin="0,0,0,0" Text="Color Name" />
+                            <ComboBox ItemsSource="{Binding ColorPalettes}" SelectedItem="{Binding SelectedColorPalette, Mode=TwoWay}" />
                             <Button
                                 Width="100"
                                 HorizontalAlignment="Right"
@@ -77,6 +84,8 @@
             Margin="20"
             Background="#FFFFFF"
             RowDefinitions="*,Auto">
+            <TextBlock IsVisible="{Binding IsFilterEmpty}" Text="NO GLAZES FOUND" />
+
             <!--  Image Grid  -->
             <ScrollViewer Margin="0,40,0,0" VerticalScrollBarVisibility="Auto">
 
@@ -112,7 +121,6 @@
 
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-
             </ScrollViewer>
 
         </Grid>
@@ -137,9 +145,11 @@
                     <TextBlock Text="{Binding SelectedCard.FiringTypeString}" />
                     <TextBlock Text="{Binding SelectedCard.SoilTypeString}" />
                     <TextBlock Text="{Binding SelectedCard.SurfaceConditionString}" />
-                    <TextBlock Text="{Binding SelectedCard.ChemicalComposition}" />
-                    <TextBlock Text="{Binding SelectedCard.Lab}" />
+                    <TextBlock Text="{Binding SelectedCard.ChemicalCompositionString}" />
                     <TextBlock Text="{Binding SelectedCard.ColorName}" />
+                    <!-- <TextBlock Text="{Binding SelectedCard.ImagePath}"/> -->
+                    <!-- <TextBlock Text="{Binding SelectedCard.Lab}" /> -->
+
                 </StackPanel>
             </DockPanel>
         </Border>

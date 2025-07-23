@@ -8,8 +8,8 @@ namespace ASTEM_DB.Services
 {
     public class DatabaseService
     {
-        private readonly string _connectionString = "Server=127.0.0.1;Database=tilearchive;User ID=root;Password=;";
-        // private readonly string _connectionString = "Server=10.0.2.2;Port=3306;Database=tilearchive;User ID=root;Password=;";
+        // private readonly string _connectionString = "Server=127.0.0.1;Database=tilearchive;User ID=root;Password=;";
+        private readonly string _connectionString = "Server=10.0.2.2;Port=3306;Database=tilearchive;User ID=root;Password=;";
 
         public async Task<List<string>> GetGlazeTypesAsync()
         {
@@ -132,13 +132,13 @@ namespace ASTEM_DB.Services
             await using var reader = await cmd.ExecuteReaderAsync();
 
             string basePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..");
-            string imageDir = Path.Combine(basePath, "Assets");
-            string placeholderPath = Path.Combine(imageDir, "placeholder.png");
+            // string imageDir = Path.Combine(basePath, "Assets");
+            string placeholderPath = Path.Combine(basePath, "Assets/placeholder.png");
 
             while (await reader.ReadAsync())
             {
                 string imageName = reader.GetString("Image");
-                string imagePath = Path.Combine(imageDir, imageName);
+                string imagePath = Path.Combine(basePath, imageName);
                 if (!File.Exists(imagePath))
                     imagePath = placeholderPath;
 
@@ -148,6 +148,7 @@ namespace ASTEM_DB.Services
                 {
                     Id = reader["ID"].ToString()!,
                     Image = image,
+                    ImagePath = imagePath,
                     GlazeType = reader["GlazeType"].ToString() ?? "Unknown",
                     SurfaceCondition = reader["SurfaceCondition"].ToString() ?? "Unknown",
                     ColorL = Convert.ToDouble(reader["Color_L"]),

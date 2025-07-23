@@ -17,13 +17,20 @@ namespace ASTEM_DB.ViewModels
         private string _soilType = string.Empty;
         private string _soilTypeString = string.Empty;
         private string _chemicalComposition = string.Empty;
+        private string _chemicalCompositionString = string.Empty;
         private string _surfaceCondition = string.Empty;
         private string _surfaceConditionString = string.Empty;
         private string _colorName = string.Empty;
+        private string _imagePath = string.Empty;
         public string Id
         {
             get => _id;
             set => this.RaiseAndSetIfChanged(ref _id, value);
+        }
+        public string ImagePath
+        {
+            get => _imagePath;
+            set => this.RaiseAndSetIfChanged(ref _imagePath, value);
         }
 
         public Avalonia.Media.Imaging.Bitmap Image
@@ -104,9 +111,17 @@ namespace ASTEM_DB.ViewModels
         public string ChemicalComposition
         {
             get => _chemicalComposition;
-            set => this.RaiseAndSetIfChanged(ref _chemicalComposition, value);
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _chemicalComposition, value);
+                ChemicalCompositionString = $"Chemical Formula: {value}";
+            }
         }
-
+        public string ChemicalCompositionString
+        {
+            get => _chemicalCompositionString;
+            private set => this.RaiseAndSetIfChanged(ref _chemicalCompositionString, value);
+        }
         public string SurfaceCondition
         {
             get => _firingType;

@@ -213,8 +213,7 @@ namespace ASTEM_DB.ViewModels
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var lab = new Lab { L = item.ColorL, A = item.ColorA, B = item.ColorB };
-                var rgb = lab.To<Rgb>();
-                item.ColorName = GetColorName(Color.FromRgb((byte)rgb.R, (byte)rgb.G, (byte)rgb.B));
+                item.ColorName = GetColorName(lab);
             }
 
             var filtered = allItems.Where(item =>
@@ -359,31 +358,30 @@ namespace ASTEM_DB.ViewModels
             this.RaisePropertyChanged(nameof(SelectedColor));
         }
 
-        private static readonly Dictionary<string, Color> BasicColors = new()
+        private static readonly Dictionary<string, Lab> LABColors = new()
         {
-            { "Black", Color.FromRgb(0, 0, 0) },
-            { "White", Color.FromRgb(255, 255, 255) },
-            { "Red", Color.FromRgb(255, 0, 0) },
-            { "Green", Color.FromRgb(0, 255, 0) },
-            { "Blue", Color.FromRgb(0, 0, 255) },
-            { "Yellow", Color.FromRgb(255, 255, 0) },
-            { "Cyan", Color.FromRgb(0, 255, 255) },
-            { "Magenta", Color.FromRgb(255, 0, 255) },
-            { "Gray", Color.FromRgb(137, 137, 137) },
-            { "Orange", Color.FromRgb(255, 165, 0) },
-            { "Brown", Color.FromRgb(137, 81, 41) },
-            { "Pink", Color.FromRgb(255, 192, 203) }
+            { "Black", new Rgb { R = 0, G = 0, B = 0 }.To<Lab>() },
+            { "White", new Rgb { R = 255, G = 255, B = 255 }.To<Lab>() },
+            { "Red", new Rgb { R = 255, G = 0, B = 0 }.To<Lab>() },
+            { "Green", new Rgb { R = 0, G = 255, B = 0 }.To<Lab>() },
+            { "Blue", new Rgb { R = 0, G = 0, B = 255 }.To<Lab>() },
+            { "Yellow", new Rgb { R = 255, G = 255, B = 0 }.To<Lab>() },
+            { "Cyan", new Rgb { R = 0, G = 255, B = 255 }.To<Lab>() },
+            { "Magenta", new Rgb { R = 255, G = 0, B = 255 }.To<Lab>() },
+            { "Gray", new Rgb { R = 137, G = 137, B = 137 }.To<Lab>() },
+            { "Orange", new Rgb { R = 255, G = 165, B = 0 }.To<Lab>() },
+            { "Brown", new Rgb { R = 137, G = 81, B = 41 }.To<Lab>() },
+            { "Pink", new Rgb { R = 255, G = 192, B = 203 }.To<Lab>() }
         };
-
-        public static string GetColorName(Color inputColor)
+        public static string GetColorName(Lab inputColor)
         {
             string colorName = "Unknown";
             double minDistance = double.MaxValue;
 
-            foreach (var (name, color) in BasicColors)
+            foreach (var (name, color) in LABColors)
             {
-                double distance = Math.Pow(inputColor.R - color.R, 2) +
-                                  Math.Pow(inputColor.G - color.G, 2) +
+                double distance = Math.Pow(inputColor.L - color.L, 2) +
+                                  Math.Pow(inputColor.A - color.A, 2) +
                                   Math.Pow(inputColor.B - color.B, 2);
 
                 if (distance < minDistance)

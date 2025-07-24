@@ -213,8 +213,7 @@ namespace ASTEM_DB.ViewModels
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var lab = new Lab { L = item.ColorL, A = item.ColorA, B = item.ColorB };
-                var rgb = lab.To<Rgb>();
-                item.ColorName = GetColorName(Color.FromRgb((byte)rgb.R, (byte)rgb.G, (byte)rgb.B));
+                item.ColorName = GetColorName(lab);
             }
 
             var filtered = allItems.Where(item =>
@@ -289,6 +288,7 @@ namespace ASTEM_DB.ViewModels
             ColorPalettes.Clear();
             ColorPalettes.Add("Black");
             ColorPalettes.Add("White");
+            ColorPalettes.Add("Cream");
             ColorPalettes.Add("Red");
             ColorPalettes.Add("Green");
             ColorPalettes.Add("Yellow");
@@ -296,8 +296,6 @@ namespace ASTEM_DB.ViewModels
             ColorPalettes.Add("Cyan");
             ColorPalettes.Add("Magenta");
             ColorPalettes.Add("Pink");
-            ColorPalettes.Add("Gray");
-            ColorPalettes.Add("Orange");
             ColorPalettes.Add("Brown");
 
             // Set default filters
@@ -354,40 +352,36 @@ namespace ASTEM_DB.ViewModels
             this.RaisePropertyChanged(nameof(SelectedColor));
         }
 
-        private static readonly Dictionary<string, Color> BasicColors = new()
+        private static readonly Dictionary<string, Lab> BasicColors = new()
         {
-            { "Black", Color.FromRgb(0, 0, 0) },
-            { "White", Color.FromRgb(255, 255, 255) },
-            { "Red", Color.FromRgb(255, 0, 0) },
-            { "Green", Color.FromRgb(0, 255, 0) },
-            { "Blue", Color.FromRgb(0, 0, 255) },
-            { "Yellow", Color.FromRgb(255, 255, 0) },
-            { "Cyan", Color.FromRgb(0, 255, 255) },
-            { "Magenta", Color.FromRgb(255, 0, 255) },
-            { "Gray", Color.FromRgb(137, 137, 137) },
-            { "Orange", Color.FromRgb(255, 165, 0) },
-            { "Brown", Color.FromRgb(137, 81, 41) },
-            { "Pink", Color.FromRgb(255, 192, 203) }
+            { "White", new Lab { L = 100, A = 0,   B = 0   } },
+            { "Cream", new Lab { L = 95,  A = -2,  B = 18  } },
+            { "Red",   new Lab { L = 53,  A = 80,  B = 67  } },
+            { "Green", new Lab { L = 87,  A = -86, B = 83  } },
+            { "Blue",  new Lab { L = 32,  A = 79,  B = -108} },
+            { "Yellow",new Lab { L = 97,  A = -21, B = 94  } },
+            { "Cyan",  new Lab { L = 91,  A = -48, B = -14 } },
+            { "Magenta",new Lab{ L = 60,  A = 98,  B = -60 } },
+            { "Brown", new Lab { L = 37,  A = 23,  B = 17  } },
+            { "Pink",  new Lab { L = 81,  A = 15,  B = 6   } }
         };
 
-        public static string GetColorName(Color inputColor)
+        public static string GetColorName(Lab inputLab)
         {
             string colorName = "Unknown";
-            double minDistance = double.MaxValue;
+            double minDeltaE = double.MaxValue;
 
-            foreach (var (name, color) in BasicColors)
+            foreach (var (name, lab) in BasicColors)
             {
-                double distance = Math.Pow(inputColor.R - color.R, 2) +
-                                  Math.Pow(inputColor.G - color.G, 2) +
-                                  Math.Pow(inputColor.B - color.B, 2);
-
-                if (distance < minDistance)
+                double deltaE = inputLab.Compare(lab, new CieDe2000Comparison());
+                if (deltaE < minDeltaE)
                 {
-                    minDistance = distance;
+                    minDeltaE = deltaE;
                     colorName = name;
                 }
             }
-            return colorName;
+            // Only assign if close enough
+            return minDeltaE <= 30 ? colorName : "Other";
         }
     }
 }

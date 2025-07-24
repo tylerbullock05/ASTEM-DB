@@ -15,7 +15,7 @@ namespace ASTEM_DB.Services
     {
         // private readonly string _connectionString = "Server=127.0.0.1;Database=tilearchive;User ID=root;Password=;";
         // private readonly string _connectionString = "Server=localhost;Port=3306;Database=tilearchive;User ID=root;Password=;";
-
+        private readonly string _connectionString = "server=localhost;port=3306;user=ceramadmin;password=J9J9NasakeMuyouAsuteroidoBerutoNo;database=tilearchive;Charset=utf8mb4;";
         public async Task<List<string>> GetGlazeTypesAsync()
         {
             var glazeTypes = new List<string>();

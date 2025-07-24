@@ -7,6 +7,8 @@ using ColorMine.ColorSpaces;
 using ColorMine.ColorSpaces.Comparisons;
 using Avalonia.Media;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 // using System.Diagnostics;
 // using Microsoft.VisualBasic.FileIO;
 
@@ -157,6 +159,8 @@ namespace ASTEM_DB.ViewModels
             }
         }
 
+        private CancellationTokenSource? _searchCts;
+
         public MainWindowViewModel()
         {
             LoadData();
@@ -166,9 +170,18 @@ namespace ASTEM_DB.ViewModels
             labConversion();
         }
 
-        public void SearchCommand()
+        public async void SearchCommand()
         {
-            FilterCardItems();
+            _searchCts?.Cancel();
+            _searchCts = new CancellationTokenSource();
+            try
+            {
+                await FilterCardItemsAsync(_searchCts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Search was canceled, do nothing
+            }
         }
 
         private bool _isFilterEmpty;
@@ -185,14 +198,20 @@ namespace ASTEM_DB.ViewModels
         }
         private async void FilterCardItems()
         {
-            var allItems = await _db.GetFilteredCardItemsAsync(SelectedGlazeType, SelectedSurfaceCondition, SelectedFiringType);
+            await FilterCardItemsAsync(CancellationToken.None);
+        }
+
+        private async Task FilterCardItemsAsync(CancellationToken cancellationToken)
+        {
+            var allItems = await _db.GetFilteredCardItemMetadataAsync(SelectedGlazeType, SelectedSurfaceCondition, SelectedFiringType);
 
             var selectedLab = new Lab { L = Lightness, A = RedGreen, B = BlueYellow };
-            double threshold = 10.0;
+            double threshold = 25.0;
 
-            // Add ColorName if it isn't already present
             foreach (var item in allItems)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var lab = new Lab { L = item.ColorL, A = item.ColorA, B = item.ColorB };
                 var rgb = lab.To<Rgb>();
                 item.ColorName = GetColorName(Color.FromRgb((byte)rgb.R, (byte)rgb.G, (byte)rgb.B));
@@ -214,13 +233,16 @@ namespace ASTEM_DB.ViewModels
                     double deltaE = selectedLab.Compare(lab, new Cie1976Comparison());
                     return deltaE <= threshold;
                 }
-            });
+            }).ToList();
 
             CardItems.Clear();
             IsFilterEmpty = !filtered.Any();
 
             foreach (var item in filtered)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                item.Image = await _db.GetImageByIdAsync(item.Id);
                 CardItems.Add(item);
             }
         }
@@ -247,6 +269,8 @@ namespace ASTEM_DB.ViewModels
             var glazeTypes = await db.GetGlazeTypesAsync();
             foreach (var type in glazeTypes)
                 GlazeTypes.Add(type);
+            // GlazeTypes.Add("Glossy");
+            // GlazeTypes.Add("Matte");
 
             // Load Surface Conditions
             SurfaceConditions.Clear();
@@ -255,6 +279,8 @@ namespace ASTEM_DB.ViewModels
             var surfaceConditions = await db.GetSurfaceCondition();
             foreach (var sc in surfaceConditions)
                 SurfaceConditions.Add(sc);
+            // SurfaceConditions.Add("Smooth");
+            // SurfaceConditions.Add("Rough");
 
             FiringTypes.Clear();
             FiringTypes.Add("All");
@@ -262,6 +288,7 @@ namespace ASTEM_DB.ViewModels
             var firingTypes = await db.GetFiringType();
             foreach (var ft in firingTypes)
                 FiringTypes.Add(ft);
+            // FiringTypes.Add("")
 
             // Set ColorPalettes
             ColorPalettes.Clear();
@@ -282,7 +309,7 @@ namespace ASTEM_DB.ViewModels
             SelectedGlazeType = "All";
             SelectedSurfaceCondition = "All";
             SelectedFiringType = "All";
-            SelectedColorPalette = "Red";
+            SelectedColorPalette = "Blue";
         }
 
         private void labConversion()
